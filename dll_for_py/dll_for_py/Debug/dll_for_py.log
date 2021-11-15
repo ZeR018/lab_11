@@ -1,0 +1,9 @@
+﻿  dllmain.cpp
+C:\work\cpp_python\git\lab_11\dll_for_py\dll_for_py\dllmain.cpp(20,1): fatal error C1010: непредвиденный конец файла во время поиска предкомпилированного заголовка. Возможно, вы забыли добавить директиву "#include "pch.h"" в источник.
+  dll_for_py.cpp
+C:\work\cpp_python\git\lab_11\dll_for_py\dll_for_py\dll_for_py.cpp(28,1): fatal error C1010: непредвиденный конец файла во время поиска предкомпилированного заголовка. Возможно, вы забыли добавить директиву "#include "pch.h"" в источник.
+  m_RK3_1.cpp
+C:\work\cpp_python\git\lab_11\dll_for_py\dll_for_py\m_RK3_1.cpp(264,1): fatal error C1010: непредвиденный конец файла во время поиска предкомпилированного заголовка. Возможно, вы забыли добавить директиву "#include "pch.h"" в источник.
+  stdafx.cpp
+C:\work\cpp_python\git\lab_11\dll_for_py\dll_for_py\stdafx.cpp(9,1): fatal error C1010: непредвиденный конец файла во время поиска предкомпилированного заголовка. Возможно, вы забыли добавить директиву "#include "pch.h"" в источник.
+  Создание кода...
