@@ -17,7 +17,6 @@ extern "C" __declspec(dllexport) void __stdcall work_RK31R(double** data, double
 {
 	string s = "test2.txt";
 	*_i = m_RK3_1_r(start, gran, s, data);
-	std::cout << "hi";
 }
 
 extern "C" __declspec(dllexport) void __stdcall del_mem(double** data)

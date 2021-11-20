@@ -43,15 +43,36 @@ v_value st_RK4_11(double x, double v1, double v2, double h, double* start_p, dou
 
 // »стинное решение задачи 9 в точке perem[__x] при начальных услови€х u(x0)=u0
 // Ќа данный момент не используетс€
-double st_true_sol_ex_11(double *perem, double* start_p)
+v_value st_true_sol_ex_11(double *perem, double* start_p)
 {
 	double fmgk = (start_p[__f]  * start_p[__m] * G) / start_p[__k];
 	//double c2 = 7.5 - fmgk;
-	double c2 = start_p[__v01] - fmgk; // почему именно 7.5? возможно ошибка!!!!!!!! (скорее всего должно быть start_p[__v01])
 	double sq = sqrt(start_p[__k] / start_p[__m]);
 
-	return c2 * cos(sq * perem[__x]) + fmgk;
+	double x0 = start_p[__x0] * sq;
+	double x1 = perem[__x];
+	double u0 = start_p[__v01];
+	double u1 = start_p[__v02];
+
+
+	double c2 = (u0 - u1*sin(x0)-fmgk)/(cos(x0)+sin(x0)*sin(x0)*sq);
+
+	v_value pr;
+	if (sin(x0) != 0)
+	{
+		double c1 = (u0 - fmgk - c2) / sin(x0);
+		pr.v1 =  c1*sin(sq*x1)+c2*cos(sq*x1)+fmgk;
+		pr.v2 = c1 * cos(x1 * sq) * sq - c2 * sin(x1 * sq) * sq;
+	}
+	else
+	{
+		pr.v1 = c2 * cos(sq * x1) + fmgk;
+		pr.v2 = c2 * sin(x1 * sq) * sq;
+	}
+
+	return pr;
 }
+
 
 
 int m_RK3_1_r(double* start_p, int* gran, string name_txt, double** py)
@@ -110,7 +131,6 @@ int m_RK3_1_r(double* start_p, int* gran, string name_txt, double** py)
 	{
 		if (i > static_cast<int>(start_p[__max_step]))
 		{
-			std::cout << "1\n";
 			break;
 		}
 	
@@ -176,8 +196,12 @@ int m_RK3_1_r(double* start_p, int* gran, string name_txt, double** py)
 			}
 		}
 	
-		perem[__u1] = st_true_sol_ex_11(perem, start_p);
-		perem[__E] = fabs(perem[__u1] - perem[__v1]);
+		v_value true_sol = st_true_sol_ex_11(perem, start_p);
+		perem[__u1] = true_sol.v1;
+		perem[__u2] = true_sol.v2;
+
+		//perem[__u1] = st_true_sol_ex_11(perem, start_p);
+		//perem[__E] = fabs(perem[__u1] - perem[__v1]);
 	
 		//----------------------------------------------------------------------
 	
@@ -218,6 +242,6 @@ int m_RK3_1_r(double* start_p, int* gran, string name_txt, double** py)
 	//запись в файл
 	record(&_f, *py, size);
 	//возвращаем размер массива 
-	std::cout << "1";
+	
 	return size;
 }

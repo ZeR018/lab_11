@@ -29,7 +29,7 @@ class Interface:
         self.border = tk.DoubleVar(master, 100.0)  # правая граница
         self.accuracy = tk.DoubleVar(master, 0.0001)  # точность выхода на правую границу
         self.error = tk.DoubleVar(master, 0.00001)  # контроль лок. поргрешности
-        self.max_step = tk.DoubleVar(master, 10000000)  # макс. число шагов
+        self.max_step = tk.DoubleVar(master, 1000)  # макс. число шагов
         self.step = tk.DoubleVar(master, 0.01)  # начальный шаг
         self.cb_var = tk.BooleanVar(master)  # хранит True или False (включен ли контроль погр-ти)
         self.cb_var.set(1)  # значение по умолчанию
@@ -181,11 +181,11 @@ class Interface:
         init_params = (c_double * 11)()
         init_params[0] = self.x0.get()
         init_params[1] = self.u0.get()
-        init_params[2] = 1
+        init_params[2] = self.u0_quote.get()
         init_params[3] = self.step.get()
-        init_params[4] = 1
-        init_params[5] = 1
-        init_params[6] = 1
+        init_params[4] = self.k.get()
+        init_params[5] = self.f.get()
+        init_params[6] = self.m.get()
         init_params[7] = self.error.get()
         init_params[8] = self.max_step.get()
         init_params[9] = self.border.get()
@@ -209,7 +209,8 @@ class Interface:
         return p, d, _i
 
     def create_table(self):
-        heads = ['k', 'x', 'V1', 'V2', 'V11', 'V22', 'ОЛП', 'h', 'U', 'u2', 'E', 'C1', 'C2']
+        #heads = ['k', 'x', 'V1', 'V2', 'V11', 'V22', 'ОЛП', 'h', 'U', 'u2', 'E', 'C1', 'C2']
+        heads = ['k', 'x', 'V1', 'V2', 'V11', 'V22', 'ОЛП', 'h', 'C1', 'C2']
         self.table = ttk.Treeview(self.table_frame, show='headings', height=20)
         self.table['columns'] = heads
         self.table.grid(row=0, column=0, sticky=tk.NSEW)
@@ -236,9 +237,9 @@ class Interface:
                 (d[p['V22'] + z * p['k']]),
                 _s,
                 d[p['h'] + z * p['k']],
-                d[p['U1'] + z * p['k']],
-                d[p['U2'] + z * p['k']],
-                d[p['E'] + z * p['k']],
+                #d[p['U1'] + z * p['k']],
+                #d[p['U2'] + z * p['k']],
+                #d[p['E'] + z * p['k']],
                 int(d[p['c1'] + z * p['k']]),
                 int(d[p['c2'] + z * p['k']])))
         scroll_bar1 = Scrollbar(self.table_frame, orient=VERTICAL, command=self.table.yview)
@@ -274,16 +275,16 @@ class Interface:
             X.append(d[p['x'] + z * p['k']])
         Y = []
         for z in range(int(_i.value / p['k'])):
-            Y.append(d[p['V1'] + z * p['k']])
+            Y.append(d[p['V2'] + z * p['k']])
         self.plotOnPlane(self.label_2, self.graph2_frame, X, Y)
 
     def fill_graph_3(self, p, d, _i):
         X = []
         for z in range(int(_i.value / p['k'])):
-            X.append(d[p['x'] + z * p['k']])
+            X.append(d[p['U1'] + z * p['k']])
         Y = []
         for z in range(int(_i.value / p['k'])):
-            Y.append(d[p['V1'] + z * p['k']])
+            Y.append(d[p['U2'] + z * p['k']])
         self.plotOnPlane(self.label_3, self.graph3_frame, X, Y)
 
     def reference(self):
