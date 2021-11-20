@@ -20,12 +20,12 @@ class Interface:
         master.configure(bg='#ececec')  # фон
         master.minsize(1200, 500)  # минимальный размер окна
 
-        self.u0 = tk.DoubleVar(master, 2)  # u0
-        self.u0_quote = tk.DoubleVar(master, 3)  # u0'
+        self.u0 = tk.DoubleVar(master, 7.5)  # u0
+        self.u0_quote = tk.DoubleVar(master, 0)  # u0'
         self.x0 = tk.DoubleVar(master, 0)  # x0
-        self.k = tk.DoubleVar(master, 10)  # k
-        self.f = tk.DoubleVar(master, 20)  # f
-        self.m = tk.DoubleVar(master, 10)  # m
+        self.k = tk.DoubleVar(master, 175)  # k
+        self.f = tk.DoubleVar(master, 0.3)  # f
+        self.m = tk.DoubleVar(master, 4.5)  # m
         self.border = tk.DoubleVar(master, 100.0)  # правая граница
         self.accuracy = tk.DoubleVar(master, 0.0001)  # точность выхода на правую границу
         self.error = tk.DoubleVar(master, 0.00001)  # контроль лок. поргрешности

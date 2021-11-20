@@ -12,7 +12,7 @@ enum {__x0,__v01,__v02,__h0,__k,__f,__m,__e,__max_step, __gran, __toch};
 enum {_xu, __contr_e};
 
 #define EPS 0.01
-#define P 3
+#define P 4
 #define P_SIZE 12
 #define G 10
 
@@ -21,91 +21,33 @@ struct v_value {
 	double v2;
 };
 
-
-// ///////////////////////////////////////////////////////////////////////////////
-// в новой реализации у нас должны быть v1 и v2 в perem, тогда ошибок не будет
-// вместо k должно быть k1, k2
-// в стартовых параметрах start_p вместо старых параметров нужны k,f,m (ну и v1, v2)
-// пока не работает с половинным шагом!
-v_value st_RK_4(double* perem, double* start_p, double* k1, double *k2, int j)
+v_value st_RK4_11(double x, double v1, double v2, double h, double* start_p, double* k1, double* k2)
 {
-	perem[__h2 + j] = perem[__h1 + j] / 2;
+	k1[0] = f1_11(x, v1, v2, start_p[__k], start_p[__f], start_p[__m]);
+	k2[0] = f2_11(x, v1, v2, start_p[__k], start_p[__f], start_p[__m]);
 
-	k1[0] = f1_11(perem[__x], perem[__v1], perem[__v2]);
-	k2[0] = f2_11(perem[__x], perem[__v1], perem[__v2], start_p[__k], start_p[__f], start_p[__m]);
-	
-	k1[1] = f1_11(perem[__h1 + j] / 2 + perem[__x], perem[__v1] + (perem[__h1 + j] / 2) * k1[0], perem[__v2] + (perem[__h1 + j] / 2) * k2[0]);
-	k2[1] = f2_11(perem[__h1 + j] / 2 + perem[__x], perem[__v1] + (perem[__h1 + j] / 2) * k1[0], perem[__v2] + (perem[__h1 + j] / 2) * k2[0], start_p[__k], start_p[__f], start_p[__m]);
+	k1[1] = f1_11(x + h / 2, v1 + h / 2 * k1[0], v2 + h / 2 * k2[0], start_p[__k], start_p[__f], start_p[__m]);
+	k2[1] = f2_11(x + h / 2, v1 + h / 2 * k1[0], v2 + h / 2 * k2[0], start_p[__k], start_p[__f], start_p[__m]);
 
-	k1[2] = f1_11(perem[__h1 + j] / 2 + perem[__x], perem[__v1] + (perem[__h1 + j] / 2) * k1[1], perem[__v2] + (perem[__h1 + j] / 2) * k2[1]);
-	k2[2] = f2_11(perem[__h1 + j] / 2 + perem[__x], perem[__v1] + (perem[__h1 + j] / 2) * k1[1], perem[__v2] + (perem[__h1 + j] / 2) * k2[1], start_p[__k], start_p[__f], start_p[__m]);
+	k1[2] = f1_11(x + h / 2, v1 + h / 2 * k1[1], v2 + h / 2 * k2[1], start_p[__k], start_p[__f], start_p[__m]);
+	k2[2] = f2_11(x + h / 2, v1 + h / 2 * k1[1], v2 + h / 2 * k2[1], start_p[__k], start_p[__f], start_p[__m]);
 
-	k1[3] = f1_11(perem[__h1 + j] + perem[__x], perem[__v1] + perem[__h1 + j] * k1[2], perem[__v2] + (perem[__h1 + j] / 2) * k2[2]);
-	k2[3] = f2_11(perem[__h1 + j] + perem[__x], perem[__v1] + perem[__h1 + j] * k1[2], perem[__v2] + (perem[__h1 + j] / 2) * k2[2], start_p[__k], start_p[__f], start_p[__m]);
+	k1[3] = f1_11(x + h, v1 + h * k1[2], v2 + h * k2[2], start_p[__k], start_p[__f], start_p[__m]);
+	k2[3] = f2_11(x + h, v1 + h * k1[2], v2 + h * k2[2], start_p[__k], start_p[__f], start_p[__m]);
 
-	
-
-	if (j)
-	{
-		double tmp1 = (k1[0] + 2 * k1[1] + 2 * k1[2] + k1[3]) / 6 * perem[__h1 + j] + perem[__v1];
-		double tmp2 = (k2[0] + 2 * k2[1] + 2 * k2[2] + k2[3]) / 6 * perem[__h1 + j] + perem[__v2];
-
-		k1[0] = f1_11(perem[__x], tmp1, perem[__v2]);
-		k2[0] = f2_11(perem[__x], tmp1, perem[__v2], start_p[__k], start_p[__f], start_p[__m]);
-
-		k1[1] = f1_11(perem[__h1 + j] / 2 + perem[__x], tmp1 + (perem[__h1 + j] / 2) * k1[0], tmp2 + (perem[__h1 + j] / 2) * k2[0]);
-		k2[1] = f2_11(perem[__h1 + j] / 2 + perem[__x], tmp1 + (perem[__h1 + j] / 2) * k1[0], tmp2 + (perem[__h1 + j] / 2) * k2[0], start_p[__k], start_p[__f], start_p[__m]);
-
-		k1[2] = f1_11(perem[__h1 + j] / 2 + perem[__x], tmp1 + (perem[__h1 + j] / 2) * k1[1], tmp2 + (perem[__h1 + j] / 2) * k2[1]);
-		k2[2] = f2_11(perem[__h1 + j] / 2 + perem[__x], tmp1 + (perem[__h1 + j] / 2) * k1[1], tmp2 + (perem[__h1 + j] / 2) * k2[1], start_p[__k], start_p[__f], start_p[__m]);
-
-		k1[3] = f1_11(perem[__h1 + j] + perem[__x], tmp1 + perem[__h1 + j] * k1[2], tmp2 + (perem[__h1 + j] / 2) * k2[2]);
-		k2[3] = f2_11(perem[__h1 + j] + perem[__x], tmp1 + perem[__h1 + j] * k1[2], tmp2 + (perem[__h1 + j] / 2) * k2[2], start_p[__k], start_p[__f], start_p[__m]);
-	}
-
-	v_value v;
-	v.v1 = ((k1[0] + 2 * k1[1] + 2 * k1[2] + k1[3]) / 6) * perem[__h1 + j] + perem[__v1];
-	v.v2 = ((k2[0] + 2 * k2[1] + 2 * k2[2] + k2[3]) / 6 )* perem[__h1 + j] + perem[__v2];
-	
-	//cout << v.v1 << "\t" << v.v2 << "\n";
-
-	return v;
+	v_value res;
+	res.v1 = v1 + h / 6 * (k1[0] + 2 * k1[1] + 2 * k1[2] + k1[3]);
+	res.v2 = v2 + h / 6 * (k2[0] + 2 * k2[1] + 2 * k2[2] + k2[3]);
+	return res;
 }
-
-
-// j здесь для сдвига массива по __h, опять же для памяти и быстродействия
-//double st_RK_1(double* perem,double* start_p, double *k, int j)
-//{
-//	//_h = h / 2;
-//	perem[__h2 + j] = perem[__h1 + j]/2;
-//	//k[0] = f(x[0], v1[0]);
-//	k[0] = f(perem[__x], perem[__v1], start_p[__a1], start_p[__a3], start_p[__m]);
-//	//k[1] = f(h / 2 + x[0], _h[0] *k[0] + v1);
-//	k[1] = f(perem[__h1 + j] / 2 + perem[__x], perem[__h2 + j] * k[0] + perem[__v1], start_p[__a1], start_p[__a3], start_p[__m]);
-//	//k[2] = f(x + h, (-k + 2 * k)*h + v1);
-//	k[2] = f(perem[__x] + perem[__h1 + j], (-k[0] + 2 * k[1])*perem[__h1 + j] + perem[__v1], start_p[__a1], start_p[__a3], start_p[__m]);
-//	
-//	if (j)
-//	{
-//		double tmp = (k[0] + 4 * k[1] + k[2]) / 6 * perem[__h1 + j] + perem[__v1];
-//
-//		k[0] = f(perem[__x], perem[__v1], start_p[__a1], start_p[__a3], start_p[__m]);
-//		//k[1] = f(h / 2 + x[0], _h[0] *k[0] + v1);
-//		k[1] = f(perem[__h1 + j] / 2 + perem[__x], perem[__h2 + j] * k[0] + perem[__v1], start_p[__a1], start_p[__a3], start_p[__m]);
-//		//k[2] = f(x + h, (-k + 2 * k)*h + v1);
-//		k[2] = f(perem[__x] + perem[__h1 + j], (-k[0] + 2 * k[1])*perem[__h1 + j] + perem[__v1], start_p[__a1], start_p[__a3], start_p[__m]);
-//	}
-//
-//	//return (k[0] + 4 * k[1] + k[2]) / 6 *(*h) + (*v1);
-//	return (k[0] + 4 * k[1] + k[2]) / 6 * perem[__h1 + j] + perem[__v1];
-//}
 
 // Истинное решение задачи 9 в точке perem[__x] при начальных условиях u(x0)=u0
 // На данный момент не используется
-double st_true_sol_ex_9(double *perem, double* start_p)
+double st_true_sol_ex_11(double *perem, double* start_p)
 {
 	double fmgk = (start_p[__f]  * start_p[__m] * G) / start_p[__k];
-	double c2 = 7.5 - fmgk;
+	//double c2 = 7.5 - fmgk;
+	double c2 = start_p[__v01] - fmgk; // почему именно 7.5? возможно ошибка!!!!!!!! (скорее всего должно быть start_p[__v01])
 	double sq = sqrt(start_p[__k] / start_p[__m]);
 
 	return c2 * cos(sq * perem[__x]) + fmgk;
@@ -207,9 +149,10 @@ int m_RK3_1_r(double* start_p, int* gran, string name_txt, double** py)
 	
 		//вычисление 
 		
-	
-		temp1 = st_RK_4(perem,start_p, k1,k2, 0);
-		temp2 = st_RK_4(perem,start_p, k1, k2, 1);
+		// double x, double v1, double v2, double h, double* start_p, double* k1, double* k2
+		temp1 = st_RK4_11(perem[__x], perem[__v01], perem[__v02], perem[__h1], start_p, k1, k2);
+		temp2 = st_RK4_11(perem[__x], perem[__v01], perem[__v02], perem[__h1] / 2, start_p, k1, k2);
+		temp2 = st_RK4_11(perem[__x] + perem[__h1] / 2, temp2.v1, temp2.v2, perem[__h1] / 2, start_p, k1, k2);
 	
 		//Вычисляем S---------------------------
 		s_temp = fabs((temp1.v1 - temp2.v1) / (pow(2, P) - 1) );
@@ -217,7 +160,7 @@ int m_RK3_1_r(double* start_p, int* gran, string name_txt, double** py)
 		if (gran[__contr_e]) //c изминением шага или без
 		{
 			//условие, если рез функции зашел за наши параметры
-			if (s_temp > EPS)
+			if (s_temp > start_p[__e])
 			{
 				i--;
 				perem[__h1] = perem[__h1] / 2;
@@ -225,7 +168,7 @@ int m_RK3_1_r(double* start_p, int* gran, string name_txt, double** py)
 				continue;
 			}
 
-			if (s_temp < EPS / pow(2, P + 1))
+			if (s_temp < start_p[__e] / pow(2, P + 1))
 			{
 				perem[__h1] = perem[__h1] * 2;
 				perem[__c2] += 1.0;
@@ -233,7 +176,7 @@ int m_RK3_1_r(double* start_p, int* gran, string name_txt, double** py)
 			}
 		}
 	
-		perem[__u1] = st_true_sol_ex_9(perem, start_p);
+		perem[__u1] = st_true_sol_ex_11(perem, start_p);
 		perem[__E] = fabs(perem[__u1] - perem[__v1]);
 	
 		//----------------------------------------------------------------------
