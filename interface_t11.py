@@ -16,7 +16,7 @@ class Interface:
         self.master = master  # инициализируем основное окно
         self.photo = tk.PhotoImage(file='logo.png')  # загрузка иконки приложения
         master.iconphoto(False, self.photo)  # установка иконки
-        master.title('Задача Коши для ОДУ выполнил Варварин Евгений')  # заголовок
+        master.title('Задача Коши для ОДУ №11 выполнил Дыряев Всеволод 381903-2')  # заголовок
         master.configure(bg='#ececec')  # фон
         master.minsize(1200, 500)  # минимальный размер окна
 
@@ -28,15 +28,15 @@ class Interface:
         self.m = tk.DoubleVar(master, 4.5)  # m
         self.border = tk.DoubleVar(master, 100.0)  # правая граница
         self.accuracy = tk.DoubleVar(master, 0.0001)  # точность выхода на правую границу
-        self.error = tk.DoubleVar(master, 0.00001)  # контроль лок. поргрешности
+        self.error = tk.DoubleVar(master, 0.00000001)  # контроль лок. поргрешности
         self.max_step = tk.DoubleVar(master, 1000)  # макс. число шагов
         self.step = tk.DoubleVar(master, 0.01)  # начальный шаг
         self.cb_var = tk.BooleanVar(master)  # хранит True или False (включен ли контроль погр-ти)
         self.cb_var.set(1)  # значение по умолчанию
 
-        self.label_1 = ['График зависимости скорости U от времени x', 'x, сек.', 'U(x), м/сек.']
-        self.label_2 = ['График зависимости', 'x, сек.', 'U(x), м/сек.']
-        self.label_3 = ['График))', 'x, сек.', 'U(x), м/сек.']
+        self.label_1 = ['График зависимости смещения груза U от времени x', 'x, сек.', 'U(x), м.']
+        self.label_2 = ["График зависимости скорости груза U' от времени x", 'x, сек.', "U'(x), м/сек."]
+        self.label_3 = ["График зависимости смещения груза U от скорости U'", "U', м/сек.", 'U(x), м.']
 
         self.create_widgets()
 
@@ -281,10 +281,10 @@ class Interface:
     def fill_graph_3(self, p, d, _i):
         X = []
         for z in range(int(_i.value / p['k'])):
-            X.append(d[p['U1'] + z * p['k']])
+            X.append(d[p['V1'] + z * p['k']])
         Y = []
         for z in range(int(_i.value / p['k'])):
-            Y.append(d[p['U2'] + z * p['k']])
+            Y.append(d[p['V2'] + z * p['k']])
         self.plotOnPlane(self.label_3, self.graph3_frame, X, Y)
 
     def reference(self):
