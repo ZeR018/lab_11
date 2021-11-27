@@ -28,8 +28,8 @@ class Interface:
         self.m = tk.DoubleVar(master, 4.5)  # m
         self.border = tk.DoubleVar(master, 100.0)  # правая граница
         self.accuracy = tk.DoubleVar(master, 0.0001)  # точность выхода на правую границу
-        self.error = tk.DoubleVar(master, 0.00000001)  # контроль лок. поргрешности
-        self.max_step = tk.DoubleVar(master, 1000)  # макс. число шагов
+        self.error = tk.DoubleVar(master, 0.00001)  # контроль лок. поргрешности
+        self.max_step = tk.DoubleVar(master, 10000)  # макс. число шагов
         self.step = tk.DoubleVar(master, 0.01)  # начальный шаг
         self.cb_var = tk.BooleanVar(master)  # хранит True или False (включен ли контроль погр-ти)
         self.cb_var.set(1)  # значение по умолчанию
@@ -217,7 +217,7 @@ class Interface:
         for header in heads:
             self.table.heading(header, text=header, anchor='center')
             self.table.column(header, anchor='center')
-            self.table.column(header, width=70)
+            self.table.column(header, width=90)
 
     def fill_table(self, p, d, _i):
         _s = 0

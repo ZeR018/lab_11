@@ -23,17 +23,17 @@ struct v_value {
 
 v_value st_RK4_11(double x, double v1, double v2, double h, double* start_p, double* k1, double* k2)
 {
-	k1[0] = f1_11(x, v1, v2, start_p[__k], start_p[__f], start_p[__m]);
-	k2[0] = f2_11(x, v1, v2, start_p[__k], start_p[__f], start_p[__m]);
+	k1[0] = f1_11(v2);
+	k2[0] = f2_11(v1, start_p[__k], start_p[__f], start_p[__m]);
 
-	k1[1] = f1_11(x + h / 2, v1 + h / 2 * k1[0], v2 + h / 2 * k2[0], start_p[__k], start_p[__f], start_p[__m]);
-	k2[1] = f2_11(x + h / 2, v1 + h / 2 * k1[0], v2 + h / 2 * k2[0], start_p[__k], start_p[__f], start_p[__m]);
+	k1[1] = f1_11(v2 + h / 2 * k1[0]);
+	k2[1] = f2_11(v1 + h / 2 * k2[0], start_p[__k], start_p[__f], start_p[__m]);
 
-	k1[2] = f1_11(x + h / 2, v1 + h / 2 * k1[1], v2 + h / 2 * k2[1], start_p[__k], start_p[__f], start_p[__m]);
-	k2[2] = f2_11(x + h / 2, v1 + h / 2 * k1[1], v2 + h / 2 * k2[1], start_p[__k], start_p[__f], start_p[__m]);
+	k1[2] = f1_11(v2 + h / 2 * k1[1]);
+	k2[2] = f2_11(v1 + h / 2 * k2[1], start_p[__k], start_p[__f], start_p[__m]);
 
-	k1[3] = f1_11(x + h, v1 + h * k1[2], v2 + h * k2[2], start_p[__k], start_p[__f], start_p[__m]);
-	k2[3] = f2_11(x + h, v1 + h * k1[2], v2 + h * k2[2], start_p[__k], start_p[__f], start_p[__m]);
+	k1[3] = f1_11(v2 + h * k1[2]);
+	k2[3] = f2_11(v1 + h * k2[2], start_p[__k], start_p[__f], start_p[__m]);
 
 	v_value res;
 	res.v1 = v1 + h / 6 * (k1[0] + 2 * k1[1] + 2 * k1[2] + k1[3]);

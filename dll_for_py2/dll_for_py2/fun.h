@@ -12,12 +12,12 @@ double f(double x, double v,double a1, double a3, double m)
 	return - (a1 * v, + a3 * pow(v, 3)) / m;
 }
 
-double f1_11(double x, double v1, double v2, double k, double f, double m)
+double f1_11(double v2)
 {
 	return v2;
 }
 
-double f2_11(double x, double v1, double v2, double k, double f, double m)
+double f2_11(double v1, double k, double f, double m)
 {
 	return G * f - k * v1 / m;
 }
