@@ -26,18 +26,18 @@ v_value st_RK4_11(double x, double v1, double v2, double h, double* start_p, dou
 	k1[0] = f1_11(v2);
 	k2[0] = f2_11(v1, start_p[__k], start_p[__f], start_p[__m]);
 
-	k1[1] = f1_11(v2 + h / 2 * k1[0]);
-	k2[1] = f2_11(v1 + h / 2 * k2[0], start_p[__k], start_p[__f], start_p[__m]);
+	k1[1] = f1_11(v2 + h * k1[0] / 2);
+	k2[1] = f2_11(v1 + h * k2[0] / 2, start_p[__k], start_p[__f], start_p[__m]);
 
-	k1[2] = f1_11(v2 + h / 2 * k1[1]);
-	k2[2] = f2_11(v1 + h / 2 * k2[1], start_p[__k], start_p[__f], start_p[__m]);
+	k1[2] = f1_11(v2 + h * k1[1] / 2);
+	k2[2] = f2_11(v1 + h * k2[1] / 2, start_p[__k], start_p[__f], start_p[__m]);
 
 	k1[3] = f1_11(v2 + h * k1[2]);
 	k2[3] = f2_11(v1 + h * k2[2], start_p[__k], start_p[__f], start_p[__m]);
 
 	v_value res;
-	res.v1 = v1 + h / 6 * (k1[0] + 2 * k1[1] + 2 * k1[2] + k1[3]);
-	res.v2 = v2 + h / 6 * (k2[0] + 2 * k2[1] + 2 * k2[2] + k2[3]);
+	res.v1 = v1 + h * (k1[0] + 2 * k1[1] + 2 * k1[2] + k1[3]) / 6;
+	res.v2 = v2 + h * (k2[0] + 2 * k2[1] + 2 * k2[2] + k2[3]) / 6;
 	return res;
 }
 
@@ -135,17 +135,18 @@ int m_RK3_1_r(double* start_p, int* gran, string name_txt, double** py)
 		}
 	
 	
-		if (z)
+		/*if (z)
 		{
 			perem[__h1] = perem[__h1] * 2;
 			perem[__c2] += 1.0;
+			continue;
 		}
 	
-		z = 0;
+		z = 0;*/
 	
 	
 		//увеличиваем x
-		perem[__x] += perem[__h1];
+		
 		//std::cout << perem[__x];
 
 		//if (perem[__x] > 10)
@@ -171,6 +172,7 @@ int m_RK3_1_r(double* start_p, int* gran, string name_txt, double** py)
 		
 		// double x, double v1, double v2, double h, double* start_p, double* k1, double* k2
 		temp1 = st_RK4_11(perem[__x], perem[__v01], perem[__v02], perem[__h1], start_p, k1, k2);
+
 		temp2 = st_RK4_11(perem[__x], perem[__v01], perem[__v02], perem[__h1] / 2, start_p, k1, k2);
 		temp2 = st_RK4_11(perem[__x] + perem[__h1] / 2, temp2.v1, temp2.v2, perem[__h1] / 2, start_p, k1, k2);
 	
@@ -192,9 +194,11 @@ int m_RK3_1_r(double* start_p, int* gran, string name_txt, double** py)
 			{
 				perem[__h1] = perem[__h1] * 2;
 				perem[__c2] += 1.0;
-
+				continue;
 			}
 		}
+
+		perem[__x] += perem[__h1];
 	
 		v_value true_sol = st_true_sol_ex_11(perem, start_p);
 		perem[__u1] = true_sol.v1;

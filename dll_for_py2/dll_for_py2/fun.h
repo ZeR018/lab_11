@@ -3,7 +3,7 @@
 
 #define MAX_ARR 100
 #define KRAT_ARR 12
-#define G 10
+#define G 980 // g = 9.8
 
 using namespace std;
 
