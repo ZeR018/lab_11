@@ -77,6 +77,10 @@ v_value st_true_sol_ex_11(double *perem, double* start_p)
 
 int m_RK3_1_r(double* start_p, int* gran, string name_txt, double** py)
 {
+
+	//start_p[__k] = start_p[__k] * 100;
+	//start_p[__v01] = start_p[__v01] * 0.01;
+
 	double v_temp = 0.0;
 	double s_temp = 0.0;
 	double v2 = 0.0;
