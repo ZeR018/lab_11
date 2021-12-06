@@ -34,6 +34,8 @@ class Interface:
         self.cb_var = tk.BooleanVar(master)  # хранит True или False (включен ли контроль погр-ти)
         self.cb_var.set(1)  # значение по умолчанию
 
+        self.i = 0
+
         self.label_1 = ['График зависимости смещения груза U от времени x', 'x, сек.', 'U(x), м.']
         self.label_2 = ["График зависимости скорости груза U' от времени x", 'x, сек.', "U'(x), м/сек."]
         self.label_3 = ["График зависимости скорости U' от смещения груза U ", "U(x), м.", "U', м/сек."]
@@ -97,19 +99,19 @@ class Interface:
         begin = tk.Toplevel()
         begin.title('Начальные условия')
         begin.minsize(300,100)
-        u0l = tk.Label(begin, text='U\u2092', bg='#ececec').grid(row=1, column=1, padx = (10, 0), pady = (10, 0), sticky = 'w')
-        u0e = tk.Entry(begin, highlightbackground='#cbcbcb', textvariable=self.u0, width = 30).grid(row=1, column=2, pady = (10, 0))
-        u0_quote_l = tk.Label(begin, text="U\u2092'", bg='#ececec').grid(row=2, column=1, padx = (10, 0), pady = (10, 0), sticky = 'w')
-        u0_quote_e = tk.Entry(begin, highlightbackground='#cbcbcb', textvariable=self.u0_quote, width = 30).grid(row=2, column=2, pady = (10, 0))
-        x0l = tk.Label(begin, text='X\u2092', bg='#ececec').grid(row=3, column=1, padx = (10, 0), pady = (10, 0), sticky = 'w')
-        x0e = tk.Entry(begin, highlightbackground='#cbcbcb', textvariable=self.x0, width = 30).grid(row=3, column=2, pady = (10, 0))
+        u0l = tk.Label(begin, text='U\u2092', bg='#ececec').grid(row=2, column=1, padx = (10, 0), pady = (10, 0), sticky = 'w')
+        u0e = tk.Entry(begin, highlightbackground='#cbcbcb', textvariable=self.u0, width = 30).grid(row=2, column=2, pady = (10, 0))
+        u0_quote_l = tk.Label(begin, text="U\u2092'", bg='#ececec').grid(row=3, column=1, padx = (10, 0), pady = (10, 0), sticky = 'w')
+        u0_quote_e = tk.Entry(begin, highlightbackground='#cbcbcb', textvariable=self.u0_quote, width = 30).grid(row=3, column=2, pady = (10, 0))
+        x0l = tk.Label(begin, text='X\u2092', bg='#ececec').grid(row=1, column=1, padx = (10, 0), pady = (10, 0), sticky = 'w')
+        x0e = tk.Entry(begin, highlightbackground='#cbcbcb', textvariable=self.x0, width = 30).grid(row=1, column=2, pady = (10, 0))
         save = tk.Button(begin, text='Сохранить', bg='#ececec', highlightbackground='#ececec', command=self.save).grid(
             row=4, column=1, columnspan = 2, pady = (10, 10))
         begin.mainloop()
 
     def set_system_params(self):
         system = tk.Toplevel()
-        system.title('Начальные условия')
+        system.title('Параметры сисетмы')
         system.minsize(300,100)
         kl = tk.Label(system, text='k', bg='#ececec').grid(row=1, column=1, padx = (10, 0), pady = (10, 0), sticky = 'w')
         ke = tk.Entry(system, highlightbackground='#cbcbcb', textvariable=self.k, width = 30).grid(row=1, column=2, pady = (10, 0))
@@ -123,21 +125,21 @@ class Interface:
 
     def set_method_params(self):
         method = tk.Toplevel()
-        method.title('Начальные условия')
+        method.title('Параметры метода')
         method.minsize(300,100)
         border_l = tk.Label(method, text='Правая граница', bg='#ececec').grid(row=1, column=1, padx = (10, 0), pady = (10, 0), sticky = 'w')
         border_e = tk.Entry(method, highlightbackground='#cbcbcb', textvariable=self.border, width = 30).grid(row=1, column=2, pady = (10, 0), padx = (0, 10))
-        error_l = tk.Label(method, text="Контроль ЛП", bg='#ececec').grid(row=2, column=1, padx = (10, 0), pady = (10, 0), sticky = 'w')
-        error_e = tk.Entry(method, highlightbackground='#cbcbcb', textvariable=self.error, width = 30).grid(row=2, column=2, pady = (10, 0), padx = (0, 10))
-        error_cb = tk.Checkbutton(method, bg='#ececec', variable=self.cb_var).grid(row=2, column=3, pady = (10, 0), padx = (0, 10))
-        max_steps_l = tk.Label(method, text='Макс. число шагов', bg='#ececec').grid(row=3, column=1, padx = (10, 0), pady = (10, 0), sticky = 'w')
-        max_steps_e = tk.Entry(method, highlightbackground='#cbcbcb', textvariable=self.max_step, width = 30).grid(row=3, column=2, pady = (10, 0), padx = (0, 10))
-        accuracy_l = tk.Label(method, text='Точность выхода на границу', bg='#ececec').grid(row=4, column=1, padx=(10, 0), pady=(10, 0), sticky = 'w')
-        accuracy_e = tk.Entry(method, highlightbackground='#cbcbcb', textvariable=self.accuracy, width=30).grid(row=4,
+        error_l = tk.Label(method, text="Контроль ЛП", bg='#ececec').grid(row=4, column=1, padx = (10, 0), pady = (10, 0), sticky = 'w')
+        error_e = tk.Entry(method, highlightbackground='#cbcbcb', textvariable=self.error, width = 30).grid(row=4, column=2, pady = (10, 0), padx = (0, 10))
+        error_cb = tk.Checkbutton(method, bg='#ececec', variable=self.cb_var).grid(row=4, column=3, pady = (10, 0), padx = (0, 10))
+        max_steps_l = tk.Label(method, text='Макс. число шагов', bg='#ececec').grid(row=5, column=1, padx = (10, 0), pady = (10, 0), sticky = 'w')
+        max_steps_e = tk.Entry(method, highlightbackground='#cbcbcb', textvariable=self.max_step, width = 30).grid(row=5, column=2, pady = (10, 0), padx = (0, 10))
+        accuracy_l = tk.Label(method, text='Точность выхода на границу', bg='#ececec').grid(row=3, column=1, padx=(10, 0), pady=(10, 0), sticky = 'w')
+        accuracy_e = tk.Entry(method, highlightbackground='#cbcbcb', textvariable=self.accuracy, width=30).grid(row=3,
                                                                                                           column=2,
                                                                                                           pady=(10, 0), padx = (0, 10))
-        step_l = tk.Label(method, text='Начальный шаг', bg='#ececec').grid(row=5, column=1, padx=(10, 0), pady=(10, 0), sticky = 'w')
-        step_e = tk.Entry(method, highlightbackground='#cbcbcb', textvariable=self.step, width=30).grid(row=5,
+        step_l = tk.Label(method, text='Начальный шаг', bg='#ececec').grid(row=2, column=1, padx=(10, 0), pady=(10, 0), sticky = 'w')
+        step_e = tk.Entry(method, highlightbackground='#cbcbcb', textvariable=self.step, width=30).grid(row=2,
                                                                                                          column=2,
                                                                                                          pady=(10, 0), padx = (0, 10))
         save = tk.Button(method, text='Сохранить', bg='#ececec', highlightbackground='#ececec', command=self.save).grid(
@@ -164,7 +166,6 @@ class Interface:
         self.graph2_frame = ttk.Frame(notebook, width=400, height=300)
         self.graph3_frame = ttk.Frame(notebook, width=400, height=300)
         self.info_frame = ttk.Frame(notebook, width=400, height=300)
-
 
     def create_widgets(self):
         self.make_menu()
@@ -209,7 +210,6 @@ class Interface:
         return p, d, _i
 
     def create_table(self):
-        #heads = ['k', 'x', 'V1', 'V2', 'V11', 'V22', 'ОЛП', 'h', 'U', 'u2', 'E', 'C1', 'C2']
         heads = ['k', 'x', 'V1', 'V2', 'V11', 'V22', 'ОЛП', 'h', 'C1', 'C2']
         self.table = ttk.Treeview(self.table_frame, show='headings', height=20)
         self.table['columns'] = heads
@@ -218,6 +218,9 @@ class Interface:
             self.table.heading(header, text=header, anchor='center')
             self.table.column(header, anchor='center')
             self.table.column(header, width=90)
+
+    def destroy_table(self):
+        self.table.destroy()
 
     def fill_table(self, p, d, _i):
         _s = 0
@@ -287,16 +290,63 @@ class Interface:
             Y.append(d[p['V2'] + z * p['k']])
         self.plotOnPlane(self.label_3, self.graph3_frame, X, Y)
 
-    def reference(self):
-        reference = tk.Label(self.info_frame, text='Тут будет справка', bg='#ececec').grid(row=0, column=0, sticky='w')
+    def reference(self, p, d, _i):
+        mul_counter = 0
+        div_counter = 0
+        max_step = self.step.get()
+        max_step_x = 0
+        min_step = self.step.get()
+        min_step_x = 0
+        max_olp = 0
+        max_olp_x = 0
+        for z in range(1, int(_i.value / p['k'])):
+            if d[p['e'] + z * p['k']] > max_olp:
+                max_olp = d[p['e'] + z * p['k']]
+                max_olp_x = d[p['x'] + z * p['k']]
+            div_counter += d[p['c1'] + z * p['k']]
+            mul_counter += d[p['c2'] + z * p['k']]
+            if d[p['h'] + z * p['k']] > max_step:
+                max_step = d[p['h'] + z * p['k']]
+                max_step_x = d[p['x'] + z * p['k']]
+            if d[p['h'] + z * p['k']] < min_step:
+                min_step = d[p['h'] + z * p['k']]
+                min_step_x = d[p['x'] + z * p['k']]
+        self.s1 = tk.Label(self.info_frame, text='Метод РК4', bg='#ececec')
+        self.s1.grid(row=0, column=0, sticky='w')
+        self.s2 = tk.Label(self.info_frame, text=f"Число шагов: {int(_i.value / p['k'])-1}", bg='#ececec')
+        self.s2.grid(row=1, column=0, sticky='w')
+        self.s3 = tk.Label(self.info_frame, text=f"Число удвоений: {mul_counter}", bg='#ececec')
+        self.s3.grid(row=2, column=0, sticky='w')
+        self.s4 = tk.Label(self.info_frame, text=f"Число делений: {div_counter}", bg='#ececec')
+        self.s4.grid(row=3, column=0, sticky='w')
+        self.s5 = tk.Label(self.info_frame, text=f"Максимальный шаг: {max_step}, в точке x = {round(max_step_x, 4)}", bg='#ececec')
+        self.s5.grid(row=4, column=0, sticky='w')
+        self.s6 = tk.Label(self.info_frame, text=f"Минимальный шаг: {min_step}, в точке x = {round(min_step_x, 4)}", bg='#ececec')
+        self.s6.grid(row=5, column=0,sticky='w')
+        self.s7 = tk.Label(self.info_frame, text=f"Максимальная ОЛП: {max_olp}, в точке x = {round(max_olp_x, 4)}", bg='#ececec')
+        self.s7.grid(row=6, column=0, sticky='w')
+
+    def destroy_reference(self):
+        self.s1.destroy()
+        self.s2.destroy()
+        self.s3.destroy()
+        self.s4.destroy()
+        self.s5.destroy()
+        self.s6.destroy()
+        self.s7.destroy()
 
     def execute(self):
         p, d, i = self.dll_work()
+        self.destroy_table()
+        self.create_table()
         self.fill_table(p, d, i)
         self.fill_graph_1(p, d, i)
         self.fill_graph_2(p, d, i)
         self.fill_graph_3(p, d, i)
-        self.reference()
+        if self.i > 0:
+            self.destroy_reference()
+        self.reference(p, d, i)
+        self.i += 1
 
 
 
