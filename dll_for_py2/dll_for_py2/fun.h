@@ -17,9 +17,14 @@ double f1_11(double v2)
 	return v2;
 }
 
-double f2_11(double v1, double k, double f, double m)
+double f2_11(double v1, double v2, double k, double f, double m)
 {
-	return G * f - k * v1 / m;
+	if(v2>0)
+		return -G * f - k * v1 / m;
+	if(v2<0)
+		return G * f - k * v1 / m;
+	else
+		return -k * v1 / m;
 }
 
 
